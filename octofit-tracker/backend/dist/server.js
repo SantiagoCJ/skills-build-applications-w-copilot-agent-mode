@@ -7,12 +7,13 @@ const express_1 = __importDefault(require("express"));
 require("./config/database");
 const routes_1 = __importDefault(require("./routes"));
 const app = (0, express_1.default)();
+const host = process.env.HOST || '0.0.0.0';
 const port = Number(process.env.PORT || 8000);
 app.use(express_1.default.json());
 app.use(routes_1.default);
 app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok' });
 });
-app.listen(port, () => {
-    console.log(`OctoFit backend listening on port ${port}`);
+app.listen(port, host, () => {
+    console.log(`OctoFit backend listening on http://${host}:${port}`);
 });

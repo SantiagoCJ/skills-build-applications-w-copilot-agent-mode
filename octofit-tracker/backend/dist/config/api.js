@@ -2,9 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getApiBaseUrl = getApiBaseUrl;
 function getApiBaseUrl() {
-    const codespaceName = process.env.CODESPACE_NAME;
-    if (codespaceName) {
-        return `https://${codespaceName}-8000.app.github.dev`;
-    }
-    return 'http://localhost:8000';
+    const codespaceName = process.env.CODESPACE_NAME?.trim();
+    return codespaceName
+        ? `https://${codespaceName}-8000.app.github.dev`
+        : 'http://localhost:8000';
 }

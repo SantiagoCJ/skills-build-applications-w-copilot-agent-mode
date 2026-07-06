@@ -2,14 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const api_1 = require("../config/api");
+const user_1 = require("../models/user");
+const team_1 = require("../models/team");
+const activity_1 = require("../models/activity");
+const leaderboard_1 = require("../models/leaderboard");
+const workout_1 = require("../models/workout");
 const router = (0, express_1.Router)();
-const resources = {
-    users: [{ id: 1, name: 'Ava', email: 'ava@example.com' }],
-    teams: [{ id: 1, name: 'Rocket Squad', members: 4 }],
-    activities: [{ id: 1, type: 'Run', duration: '30m', calories: 320 }],
-    leaderboard: [{ id: 1, name: 'Ava', score: 1200 }],
-    workouts: [{ id: 1, title: 'HIIT Circuit', difficulty: 'Intermediate' }],
-};
 router.get('/api', (_req, res) => {
     res.json({
         message: 'OctoFit API',
@@ -23,19 +21,24 @@ router.get('/api', (_req, res) => {
         ],
     });
 });
-router.get('/api/users/', (_req, res) => {
-    res.json(resources.users);
+router.get('/api/users/', async (_req, res) => {
+    const users = await user_1.User.find().lean();
+    res.json(users);
 });
-router.get('/api/teams/', (_req, res) => {
-    res.json(resources.teams);
+router.get('/api/teams/', async (_req, res) => {
+    const teams = await team_1.Team.find().populate('members').lean();
+    res.json(teams);
 });
-router.get('/api/activities/', (_req, res) => {
-    res.json(resources.activities);
+router.get('/api/activities/', async (_req, res) => {
+    const activities = await activity_1.Activity.find().populate('user').lean();
+    res.json(activities);
 });
-router.get('/api/leaderboard/', (_req, res) => {
-    res.json(resources.leaderboard);
+router.get('/api/leaderboard/', async (_req, res) => {
+    const leaderboard = await leaderboard_1.LeaderboardEntry.find().populate('user').lean();
+    res.json(leaderboard);
 });
-router.get('/api/workouts/', (_req, res) => {
-    res.json(resources.workouts);
+router.get('/api/workouts/', async (_req, res) => {
+    const workouts = await workout_1.Workout.find().lean();
+    res.json(workouts);
 });
 exports.default = router;
